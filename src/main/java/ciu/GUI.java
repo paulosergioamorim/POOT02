@@ -1,3 +1,5 @@
+package ciu;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,29 +7,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.awt.Color.*;
+import static cdp.Palavras.LIST;
+import static java.awt.Color.DARK_GRAY;
+import static java.awt.Color.LIGHT_GRAY;
 
 public class GUI extends JFrame {
-    private final JPanel panel;
+    private static final Dimension DIMENSION
+            = new Dimension(600,600);
+
     private final JLabel labelErros;
     private final JLabel labelLances;
     private final JTextField fieldPalavra;
     private final JTextField fieldLance;
-    private final JButton buttonJogar;
-    private final JButton buttonNovaTentativa;
 
-    private static final Dimension DIMENSION = new Dimension(600,600);
-
-    private String palavraAtual;
+    private String palavra;
     private String palavraEscondida;
-    private StringBuilder lances;
+    private String lances;
 
     private List<String> erros;
 
     public GUI() {
         super("Jogo da Forca");
 
-        panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.setBackground(DARK_GRAY);
 
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -53,13 +55,17 @@ public class GUI extends JFrame {
         fieldLance = new JTextField(10);
         fieldLance.setPreferredSize(new Dimension(50,30));
 
-        buttonJogar = new JButton("Jogar");
+        var buttonJogar = new JButton("Jogar");
         buttonJogar.setBackground(LIGHT_GRAY);
         buttonJogar.setBorderPainted(false);
         buttonJogar.setFocusPainted(false);
         buttonJogar.addActionListener(this::tentativa);
 
-        buttonNovaTentativa = new JButton("Nova Tentativa");
+        var buttonNovaTentativa = new JButton("Nova Tentativa");
+        buttonNovaTentativa.setBackground(LIGHT_GRAY);
+        buttonNovaTentativa.setBorderPainted(false);
+        buttonNovaTentativa.setFocusPainted(false);
+        buttonNovaTentativa.addActionListener(e -> this.start());
 
         var lanceLabel = new JLabel("Lance: ");
         lanceLabel.setForeground(LIGHT_GRAY);
@@ -71,63 +77,77 @@ public class GUI extends JFrame {
         add(lanceLabel);
         add(fieldLance);
         add(buttonJogar);
+        add(buttonNovaTentativa);
 
-        this.startGame();
+        this.start();
     }
 
     private void tentativa(ActionEvent e) {
         var chute = "";
-        var chars = palavraAtual.split("");
+        var chars = palavra.split("");
 
         try {
             chute = fieldLance.getText().substring(0,1).toUpperCase();
         } catch (Exception ignored) { }
 
-        if (palavraAtual
-                .toUpperCase()
-                .contains(chute)
-        ) {
+        if (palavra.toUpperCase().contains(chute)) {
             var stringBuilder = new StringBuilder(palavraEscondida);
-
             for (int i = 0; i < chars.length; i++)
                 if (chars[i].equalsIgnoreCase(chute)) {
                     stringBuilder.setCharAt(i, chute.charAt(0));
-                    if (!lances.toString().contains(chute)) this.addToLances(chute);
+                    if (!lances.contains(chute)) this.addLance(chute);
                 }
-
             palavraEscondida = stringBuilder.toString();
             fieldPalavra.setText(palavraEscondida);
         } else if (!erros.contains(chute)) erros.add(chute);
 
         labelErros.setText("Erros: " + erros.size() + " de 6");
+        labelLances.setText(lances);
         fieldLance.setText(null);
 
-        if (erros.size() == 6) this.startGame();
+        if (erros.size() == 6) {
+            var options = new Object[] {"Sair", "Recomeçar"};
+            var i = JOptionPane.showOptionDialog(
+                    this,"Você perdeu!",null,JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,null,options,null
+            );
+            switch (i) {
+                case 0 : this.dispose(); break;
+                case 1 : this.start(); break;
+            }
+        } // se perder
+
+        if (palavraEscondida.replace("-", " ").equalsIgnoreCase(palavra)) {
+            var options = new Object[] {"Sair", "Recomeçar"};
+            var i = JOptionPane.showOptionDialog(
+                    this,"Você venceu!",null,JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,null,options,null
+            );
+            switch (i) {
+                case 0 : this.dispose(); break;
+                case 1 : this.start(); break;
+            }
+        } // se ganhar
     }
 
-    private void startGame() {
-        palavraAtual = this.getPalavra();
+    private void start() {
+        palavra = this.getPalavra();
         erros = new ArrayList<>();
 
-        lances = new StringBuilder("Lances: ");
+        lances = "Lances: ";
+        labelLances.setText(lances);
+        labelErros.setText("Erros: " + erros.size() + " de 6");
 
-        labelLances.setText(String.valueOf(lances));
-
-        palavraEscondida = palavraAtual
+        palavraEscondida = palavra
                 .replaceAll("\\p{javaLetter}","_")
                 .replaceAll("\\s","-");
-
-        labelErros.setText("Erros: " + erros.size() + "de 6");
         fieldPalavra.setText(palavraEscondida);
     }
 
     private String getPalavra() {
         var random = new Random();
-        return Words.LIST.get(random.nextInt(9));
+        return LIST.get(random.nextInt(LIST.size()));
     }
 
-    private void addToLances(String lance) {
-        lances.append(lance).append(" ");
-        labelLances.setText(lances.toString());
-    }
+    private void addLance(String lance) { lances += lance + " "; }
 }

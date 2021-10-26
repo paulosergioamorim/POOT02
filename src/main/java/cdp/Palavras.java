@@ -1,7 +1,9 @@
+package cdp;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Words {
+public class Palavras {
     public final static List<String> LIST =
             new ArrayList<>(
                     List.of(
@@ -15,7 +17,8 @@ public class Words {
                             "Modelo Relacional Normalizado",
                             "Diagrama de Classes",
                             "BrModelo",
-                            "NetBeans"
+                            "NetBeans",
+                            "Framework"
                     )
             );
 }
