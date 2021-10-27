@@ -2,6 +2,8 @@ package cci;
 
 import ciu.GUI;
 
+import javax.swing.JFrame;
+
 /**
  * @author Paulo Sergio
  * @author Nycolas Monjardim
@@ -9,7 +11,7 @@ import ciu.GUI;
 
 public class Controlador {
     public static void main(String[] args) {
-        var frame = new GUI();
+        JFrame frame = new GUI();
         frame.setVisible(true);
     }
 }

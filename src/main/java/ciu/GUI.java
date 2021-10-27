@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Random;
 
 import static cdp.Palavras.LIST;
-import static java.awt.Color.DARK_GRAY;
-import static java.awt.Color.LIGHT_GRAY;
+import static java.awt.Color.*;
 
 public class GUI extends JFrame {
     private static final Dimension DIMENSION
             = new Dimension(600,600);
+    private static final Dimension ELEMENT_DIMENSION
+            = new Dimension(500,30);
 
     private final JLabel labelErros;
     private final JLabel labelLances;
@@ -38,36 +39,35 @@ public class GUI extends JFrame {
         super.setResizable(false);
 
         labelErros = new JLabel();
-        labelErros.setPreferredSize(new Dimension(500,50));
+        labelErros.setPreferredSize(ELEMENT_DIMENSION);
         labelErros.setForeground(LIGHT_GRAY);
         labelErros.setFont(new Font("Arial",Font.BOLD,25));
 
         labelLances = new JLabel();
-        labelLances.setPreferredSize(new Dimension(500,50));
+        labelLances.setPreferredSize(ELEMENT_DIMENSION);
         labelLances.setForeground(LIGHT_GRAY);
         labelLances.setFont(new Font("Arial",Font.BOLD,25));
 
         fieldPalavra = new JTextField(30);
-        fieldPalavra.setPreferredSize(new Dimension(500,30));
+        fieldPalavra.setPreferredSize(ELEMENT_DIMENSION);
         fieldPalavra.setFont(new Font("Arial", Font.BOLD, 20));
         fieldPalavra.setEnabled(false);
 
         fieldLance = new JTextField(10);
-        fieldLance.setPreferredSize(new Dimension(50,30));
 
-        var buttonJogar = new JButton("Jogar");
+        JButton buttonJogar = new JButton("Jogar");
         buttonJogar.setBackground(LIGHT_GRAY);
         buttonJogar.setBorderPainted(false);
         buttonJogar.setFocusPainted(false);
         buttonJogar.addActionListener(this::tentativa);
 
-        var buttonNovaTentativa = new JButton("Nova Tentativa");
+        JButton buttonNovaTentativa = new JButton("Nova Tentativa");
         buttonNovaTentativa.setBackground(LIGHT_GRAY);
         buttonNovaTentativa.setBorderPainted(false);
         buttonNovaTentativa.setFocusPainted(false);
         buttonNovaTentativa.addActionListener(e -> this.start());
 
-        var lanceLabel = new JLabel("Lance: ");
+        JLabel lanceLabel = new JLabel("Lance: ");
         lanceLabel.setForeground(LIGHT_GRAY);
         lanceLabel.setFont(new Font("Arial",Font.BOLD,20));
 
@@ -83,21 +83,21 @@ public class GUI extends JFrame {
     }
 
     private void tentativa(ActionEvent e) {
-        var chute = "";
-        var chars = palavra.split("");
+        String chute;
+        String[] chars = palavra.split("");
 
-        try {
-            chute = fieldLance.getText().substring(0,1).toUpperCase();
-        } catch (Exception ignored) { }
+        if (!fieldLance.getText().isEmpty())
+            chute = fieldLance.getText().substring(0, 1).toUpperCase();
+        else return;
 
         if (palavra.toUpperCase().contains(chute)) {
-            var stringBuilder = new StringBuilder(palavraEscondida);
+            StringBuilder s = new StringBuilder(palavraEscondida);
             for (int i = 0; i < chars.length; i++)
                 if (chars[i].equalsIgnoreCase(chute)) {
-                    stringBuilder.setCharAt(i, chute.charAt(0));
+                    s.setCharAt(i, chute.charAt(0));
                     if (!lances.contains(chute)) this.addLance(chute);
                 }
-            palavraEscondida = stringBuilder.toString();
+            palavraEscondida = s.toString();
             fieldPalavra.setText(palavraEscondida);
         } else if (!erros.contains(chute)) erros.add(chute);
 
@@ -106,8 +106,8 @@ public class GUI extends JFrame {
         fieldLance.setText(null);
 
         if (erros.size() == 6) {
-            var options = new Object[] {"Sair", "Recomeçar"};
-            var i = JOptionPane.showOptionDialog(
+            Object[] options = new Object[] {"Sair", "Recomeçar"};
+            int i = JOptionPane.showOptionDialog(
                     this,"Você perdeu!",null,JOptionPane.YES_NO_OPTION,
                     JOptionPane.PLAIN_MESSAGE,null,options,null
             );
@@ -118,8 +118,8 @@ public class GUI extends JFrame {
         } // se perder
 
         if (palavraEscondida.replace("-", " ").equalsIgnoreCase(palavra)) {
-            var options = new Object[] {"Sair", "Recomeçar"};
-            var i = JOptionPane.showOptionDialog(
+            Object[] options = new Object[] {"Sair", "Recomeçar"};
+            int i = JOptionPane.showOptionDialog(
                     this,"Você venceu!",null,JOptionPane.YES_NO_OPTION,
                     JOptionPane.PLAIN_MESSAGE,null,options,null
             );
@@ -145,8 +145,9 @@ public class GUI extends JFrame {
     }
 
     private String getPalavra() {
-        var random = new Random();
-        return LIST.get(random.nextInt(LIST.size()));
+        Random random = new Random();
+        int i = random.nextInt(LIST.size() - 1);
+        return LIST.get(i);
     }
 
     private void addLance(String lance) { lances += lance + " "; }
