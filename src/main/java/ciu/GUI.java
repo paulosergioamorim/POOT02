@@ -5,17 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import static cdp.Palavras.LIST;
-import static java.awt.Color.*;
+import static cdp.Palavras.getRandomPalavra;
+import static java.awt.Color.DARK_GRAY;
+import static java.awt.Color.LIGHT_GRAY;
 
 public class GUI extends JFrame {
-    private static final Dimension DIMENSION
-            = new Dimension(600,600);
-    private static final Dimension ELEMENT_DIMENSION
-            = new Dimension(500,30);
-
     private final JLabel labelErros;
     private final JLabel labelLances;
     private final JTextField fieldPalavra;
@@ -34,21 +29,21 @@ public class GUI extends JFrame {
 
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
         super.setContentPane(panel);
-        super.setSize(DIMENSION);
+        super.setSize(600,600);
         super.setResizable(false);
 
         labelErros = new JLabel();
-        labelErros.setPreferredSize(ELEMENT_DIMENSION);
+        labelErros.setPreferredSize(new Dimension(500,30));
         labelErros.setForeground(LIGHT_GRAY);
         labelErros.setFont(new Font("Arial",Font.BOLD,25));
 
         labelLances = new JLabel();
-        labelLances.setPreferredSize(ELEMENT_DIMENSION);
+        labelLances.setPreferredSize(new Dimension(500,30));
         labelLances.setForeground(LIGHT_GRAY);
         labelLances.setFont(new Font("Arial",Font.BOLD,25));
 
         fieldPalavra = new JTextField(30);
-        fieldPalavra.setPreferredSize(ELEMENT_DIMENSION);
+        fieldPalavra.setPreferredSize(new Dimension(500,30));
         fieldPalavra.setFont(new Font("Arial", Font.BOLD, 20));
         fieldPalavra.setEnabled(false);
 
@@ -130,7 +125,7 @@ public class GUI extends JFrame {
     }
 
     private void start() {
-        palavra = this.getPalavra();
+        palavra = getRandomPalavra();
         erros = new ArrayList<>();
 
         lances = "Lances: ";
@@ -141,12 +136,6 @@ public class GUI extends JFrame {
                 .replaceAll("\\p{javaLetter}","_")
                 .replaceAll("\\s","-");
         fieldPalavra.setText(palavraEscondida);
-    }
-
-    private String getPalavra() {
-        Random random = new Random();
-        int i = random.nextInt(LIST.size() - 1);
-        return LIST.get(i);
     }
 
     private void addLance(String lance) { lances += lance + " "; }

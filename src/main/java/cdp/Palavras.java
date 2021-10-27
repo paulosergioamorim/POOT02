@@ -2,6 +2,7 @@ package cdp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Palavras {
     public final static List<String> LIST =
@@ -21,4 +22,10 @@ public class Palavras {
                             "Framework"
                     )
             );
+
+    public static String getRandomPalavra() {
+        Random random = new Random();
+        int index = random.nextInt(LIST.size()-1);
+        return LIST.get(index);
+    }
 }
