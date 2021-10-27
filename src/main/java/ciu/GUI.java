@@ -24,7 +24,6 @@ public class GUI extends JFrame {
     private String palavra;
     private String palavraEscondida;
     private String lances;
-
     private List<String> erros;
 
     public GUI() {
