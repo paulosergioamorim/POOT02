@@ -6,6 +6,12 @@ import java.util.List;
 
 import static cdp.Palavras.getRandomPalavra;
 
+/**
+ * @author Paulo Sergio
+ * @author Nycolas Monjardim
+ * @see <a href="https://github.com/paulosergioamorim/">GitHub</a>
+ */
+
 public class Logica {
     private String palavra;
     private String palavraEscondida;

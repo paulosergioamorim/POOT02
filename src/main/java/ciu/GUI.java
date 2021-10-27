@@ -8,6 +8,12 @@ import java.awt.*;
 import static java.awt.Color.DARK_GRAY;
 import static java.awt.Color.LIGHT_GRAY;
 
+/**
+ * @author Paulo Sergio
+ * @author Nycolas Monjardim
+ * @see <a href="https://github.com/paulosergioamorim/">GitHub</a>
+ */
+
 public class GUI extends JFrame {
     private final JLabel labelErros;
     private final JLabel labelLances;
@@ -16,31 +22,34 @@ public class GUI extends JFrame {
 
     public GUI(Controlador controlador) {
         super("Jogo da Forca");
-
-        JPanel panel = new JPanel();
-        panel.setBackground(DARK_GRAY);
-
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        super.setContentPane(panel);
         super.setSize(600,600);
         super.setResizable(false);
 
+        JPanel panel = new JPanel();
+        panel.setBackground(DARK_GRAY);
+        super.setContentPane(panel);
+
+        final Font font = new Font("Arial",Font.BOLD,25);
+        final Dimension dimension = new Dimension(500,50);
+
         labelErros = new JLabel();
-        labelErros.setPreferredSize(new Dimension(500,80));
+        labelErros.setPreferredSize(dimension);
         labelErros.setForeground(LIGHT_GRAY);
-        labelErros.setFont(new Font("Arial",Font.BOLD,25));
+        labelErros.setFont(font);
 
         labelLances = new JLabel();
-        labelLances.setPreferredSize(new Dimension(500,80));
+        labelLances.setPreferredSize(dimension);
         labelLances.setForeground(LIGHT_GRAY);
-        labelLances.setFont(new Font("Arial",Font.BOLD,25));
+        labelLances.setFont(font);
 
-        fieldPalavra = new JTextField(30);
-        fieldPalavra.setPreferredSize(new Dimension(500,30));
-        fieldPalavra.setFont(new Font("Arial", Font.BOLD, 20));
+        fieldPalavra = new JTextField(25);
+        fieldPalavra.setPreferredSize(dimension);
+        fieldPalavra.setFont(font);
         fieldPalavra.setEnabled(false);
 
-        fieldLance = new JTextField(10);
+        fieldLance = new JTextField(5);
+        fieldLance.setPreferredSize(new Dimension(50,30));
 
         JButton buttonJogar = new JButton("Jogar");
         buttonJogar.setBackground(LIGHT_GRAY);
@@ -66,6 +75,10 @@ public class GUI extends JFrame {
         add(buttonJogar);
         add(buttonNovaTentativa);
     }
+
+    public void vitoria() { JOptionPane.showMessageDialog(this,"Você venceu!"); }
+
+    public void derrota() { JOptionPane.showMessageDialog(this,"Você perdeu!"); }
 
     public JLabel getLabelErros() { return labelErros; }
 

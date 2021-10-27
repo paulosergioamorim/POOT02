@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author Paulo Sergio
+ * @author Nycolas Monjardim
+ * @see <a href="https://github.com/paulosergioamorim/">GitHub</a>
+ */
+
 public class Palavras {
     public final static List<String> LIST =
             new ArrayList<>(

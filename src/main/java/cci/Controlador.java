@@ -7,11 +7,12 @@ import javax.swing.*;
 /**
  * @author Paulo Sergio
  * @author Nycolas Monjardim
+ * @see <a href="https://github.com/paulosergioamorim/">GitHub</a>
  */
 
 public class Controlador {
-    GUI frame;
-    Logica logica;
+    private final GUI frame;
+    private final Logica logica;
 
     public Controlador() {
         frame = new GUI(this);
@@ -35,9 +36,13 @@ public class Controlador {
         frame.getLabelLances().setText(logica.getLances());
         frame.getFieldPalavra().setText(logica.getPalavraEscondida());
 
-        if (logica.getErros().size() == 6
-        || !logica.getPalavraEscondida().contains("_"))
+        if (logica.getErros().size() == 6) {
+            frame.derrota();
             this.comecar();
+        } if (!logica.getPalavraEscondida().contains("_")) {
+            frame.vitoria();
+            this.comecar();
+        }
     }
 
     public static void main(String[] args) {
